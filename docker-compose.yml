@@ -1,0 +1,66 @@
+version: '2'
+services:
+  ijschoolmanageradministrationservice:
+    image: ijschoolmanageradministrationservice
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - 'SPRING_PROFILES_ACTIVE=prod,swagger'
+      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - 'EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/eureka'
+      - 'SPRING_CLOUD_CONFIG_URI=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/config'
+      - 'SPRING_DATASOURCE_URL=jdbc:mysql://ijschoolmanageradministrationservice-mysql:3306/ijschoolmanageradministrationservice?useUnicode=true&characterEncoding=utf8&useSSL=false&createDatabaseIfNotExist=true'
+      - 'SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/auth/realms/jhipster'
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=internal
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=internal
+      - JHIPSTER_SLEEP=60
+      - 'KAFKA_BOOTSTRAPSERVERS=kafka:9092'
+      - JHIPSTER_REGISTRY_PASSWORD=admin
+  ijschoolmanageradministrationservice-mysql:
+    image: 'mysql:8.0.19'
+    environment:
+      - MYSQL_USER=root
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=ijschoolmanageradministrationservice
+    command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
+
+  ijschoolmanagergateway:
+    image: ijschoolmanagergateway
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - 'SPRING_PROFILES_ACTIVE=prod,swagger'
+      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - 'EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/eureka'
+      - 'SPRING_CLOUD_CONFIG_URI=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/config'
+      - 'SPRING_DATASOURCE_URL=jdbc:mysql://ijschoolmanagergateway-mysql:3306/ijschoolmanagergateway?useUnicode=true&characterEncoding=utf8&useSSL=false&createDatabaseIfNotExist=true'
+      - 'SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/auth/realms/jhipster'
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=web_app
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=web_app
+      - JHIPSTER_SLEEP=60
+      - 'KAFKA_BOOTSTRAPSERVERS=kafka:9092'
+      - JHIPSTER_REGISTRY_PASSWORD=admin
+    ports:
+      - '8080:8080'
+  ijschoolmanagergateway-mysql:
+    image: 'mysql:8.0.19'
+    environment:
+      - MYSQL_USER=root
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=ijschoolmanagergateway
+    command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
+
+  zookeeper:
+    extends:
+      file: kafka.yml
+      service: zookeeper
+  kafka:
+    extends:
+      file: kafka.yml
+      service: kafka
+  jhipster-registry:
+    extends:
+      file: jhipster-registry.yml
+      service: jhipster-registry
+  keycloak:
+    extends:
+      file: keycloak.yml
+      service: keycloak

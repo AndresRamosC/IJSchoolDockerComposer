@@ -1,0 +1,11 @@
+{
+  "generator-jhipster": {
+    "appsFolders": ["IJSchoolManagerAdministrationService", "IJSchoolManagerGateway"],
+    "directoryPath": "../",
+    "gatewayType": "zuul",
+    "monitoring": "no",
+    "consoleOptions": [],
+    "serviceDiscoveryType": "eureka",
+    "jwtSecretKey": "ZmZiZmU3ZTU3NzcxNzgyYjA1NDg5M2VjMTQ3ZmQzYmQxMGYyYzVjNDM1NGJlODY4ZWNkMzRkN2JjMWFkZWZkMzUxMTAxOGFkZTIxMTJhMmRhNmM2ODQ5MjNlOTc0MWNkY2Q2ZA=="
+  }
+}
